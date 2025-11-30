@@ -1,0 +1,439 @@
+/* --- VARIABLES DE COLORES NAVIDEÑOS --- */
+:root {
+  --xmas-red: #d42426;
+  --xmas-dark-red: #a01113;
+  --xmas-green: #165b33;
+  --xmas-gold: #f8b229;
+  --snow: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.95);
+}
+
+/* --- ESTILOS GENERALES (BODY Y FONDO) --- */
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at center, #1a472a 0%, #0d2b18 100%);
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  padding: 20px;
+  overflow-x: hidden;
+  position: relative;
+  color: #333;
+}
+
+/* Modificador para páginas que necesitan flujo en columna (como resultados) */
+body.layout-column {
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Efecto de Nieve cayendo */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: 
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(white 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: 0 0, 25px 25px;
+  opacity: 0.2;
+  animation: snow 10s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes snow {
+  0% { background-position: 0 0, 25px 25px; }
+  100% { background-position: 0 100px, 25px 125px; }
+}
+
+/* --- CONTENEDORES (Cards y Paneles) --- */
+/* Estilo base compartido */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 
+    0 20px 50px rgba(0,0,0,0.5),
+    0 0 0 8px rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--xmas-red);
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  width: 100%;
+}
+
+/* Específico para la tarjeta de sorteo */
+.card-sorteo {
+  padding: 2.5rem;
+  max-width: 450px;
+}
+
+/* Específico para la tabla de resultados */
+.container-resultados {
+  padding: 2rem;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+/* --- TIPOGRAFÍA --- */
+h1 {
+  font-size: 2.5rem;
+  color: var(--xmas-red);
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+}
+
+.subtitle {
+  color: var(--xmas-green);
+  font-weight: 600;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+/* --- FORMULARIOS --- */
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  color: var(--xmas-dark-red);
+  margin-bottom: 0.5rem;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  border-color: var(--xmas-gold);
+  box-shadow: 0 0 0 4px rgba(248, 178, 41, 0.2);
+}
+
+.error-msg {
+  color: var(--xmas-red);
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: block;
+  height: 1.2em;
+}
+
+/* --- BOTONES --- */
+.btn-container {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+button, .btn-link {
+  flex: 1; /* Para que ocupen espacio igual si están en flex */
+  min-width: 140px; /* Ancho mínimo para que no se aplasten */
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none; /* Para los enlaces con aspecto de botón */
+  display: inline-flex; /* Mejor alineación */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+button:active, .btn-link:active {
+  transform: scale(0.95);
+}
+
+.btn-primary {
+  background: var(--xmas-red);
+  color: white;
+  box-shadow: 0 4px 0 var(--xmas-dark-red);
+}
+
+.btn-primary:hover {
+  background: #ff2e31;
+  box-shadow: 0 6px 0 var(--xmas-dark-red);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--xmas-green);
+  color: white;
+  box-shadow: 0 4px 0 #0f3d22;
+}
+
+.btn-secondary:hover {
+  background: #2ecc71;
+  box-shadow: 0 6px 0 #0f3d22;
+  transform: translateY(-2px);
+}
+
+/* ESTILOS ESPECÍFICOS PARA INPUT FILE */
+input[type="file"] {
+  background: white;
+  padding: 6px; /* Un poco menos de padding para que quepa el botón */
+  cursor: pointer;
+}
+
+/* Estiliza el botón "Seleccionar archivo" interno del navegador */
+input[type="file"]::file-selector-button {
+  background-color: var(--xmas-green);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-weight: bold;
+  font-family: inherit;
+  transition: background-color 0.3s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #2ecc71;
+}
+
+/* Soporte para navegadores Webkit (Chrome, Safari, Edge) antiguos */
+input[type="file"]::-webkit-file-upload-button {
+  background-color: var(--xmas-green);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-weight: bold;
+  font-family: inherit;
+  transition: background-color 0.3s ease;
+}
+
+.error-msg {
+  color: var(--xmas-red);
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: block;
+  height: 1.2em;
+}
+
+/* Inversión de colores para resultados (opcional, o usar las mismas clases) */
+.btn-accent {
+  background: var(--xmas-gold);
+  color: #333;
+  box-shadow: 0 4px 0 #c58a1f;
+}
+
+/* --- TABLAS (Resultados) --- */
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: var(--xmas-green);
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+tr:nth-child(even) {
+  background-color: rgba(22, 91, 51, 0.05);
+}
+
+tr:hover {
+  background-color: rgba(248, 178, 41, 0.15);
+}
+
+.premio-col {
+  font-weight: bold;
+  color: var(--xmas-red);
+}
+
+.empty-msg {
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+/* --- MODALES --- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 350px;
+  width: 90%;
+  position: relative;
+  border: 4px solid var(--xmas-gold);
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-title {
+  color: var(--xmas-red);
+  font-size: 1.8rem;
+  margin-top: 0;
+}
+
+.modal-icon {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.premio-destacado {
+  color: var(--xmas-red);
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
+
+/* --- ANIMACIONES --- */
+.fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* --- PANTALLA DE CARGA (LOADER) --- */
+.loader-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(26, 71, 42, 0.85); /* Verde oscuro translúcido */
+  z-index: 200; /* Encima de todo */
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.loader-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+/* LOADER ESPECÍFICO: TRAGAMONEDAS */
+.loader-slot {
+  width: 150px;
+  height: 240px;
+  background: white;
+  border: 5px solid var(--xmas-gold);
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 20px rgba(248, 178, 41, 0.6);
+  margin-bottom: 20px;
+}
+
+.slot-reel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Animación de desplazamiento rápido */
+  animation: slot-spin 0.6s linear infinite;
+}
+
+.slot-icon {
+  font-size: 100px; /* Aumentado proporcionalmente (mitad de 240) */
+  line-height: 240px; /* Debe ser igual a la altura del contenedor */
+}
+
+/* Ventana de brillo sobre el tragamonedas */
+.loader-slot::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(255,255,255,0) 20%, rgba(255,255,255,0) 80%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+}
+
+@keyframes slot-spin {
+  0% { transform: translateY(0); }
+  /* Movemos 3 iconos. Cada icono ahora mide 240px de alto. 
+     3 * 240px = 720px */
+  100% { transform: translateY(-720px); }
+}
+
+/* Texto animado */
+.loader-text {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.loader-text::after {
+  content: '...';
+  animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: ''; }
+  40% { content: '.'; }
+  60% { content: '..'; }
+  80%, 100% { content: '...'; }
+}

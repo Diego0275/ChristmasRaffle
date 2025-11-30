@@ -1,0 +1,44 @@
+{
+"premios": [
+  {
+    "id": 1,
+    "nombre": "Pantalla"
+  },
+  {
+    "id": 2,
+    "nombre": "Laptop"
+  },
+  {
+    "id": 3,
+    "nombre": "Celular"
+  },
+  {
+    "id": 4,
+    "nombre": "Taladro"
+  },
+  {
+    "id": 5,
+    "nombre": "Lavadora"
+  },
+  {
+    "id": 6,
+    "nombre": "Audifonos"
+  },
+  {
+    "id": 7,
+    "nombre": "Teclado"
+  },
+  {
+    "id": 8,
+    "nombre": "Impresora"
+  },
+  {
+    "id": 9,
+    "nombre": "Trapo"
+  },
+  {
+    "id": 10,
+    "nombre": "Nada"
+  }
+]
+}

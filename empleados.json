@@ -1,0 +1,54 @@
+{
+    "empleados": [
+    {
+        "empresa": "P",
+        "id": 1,
+        "nombre": "Juan"
+    },
+    {
+        "empresa": "P",
+        "id": 2,
+        "nombre": "Ana"
+    },
+    {
+        "empresa": "P",
+        "id": 3,
+        "nombre": "Enzo"
+    },
+    {
+        "empresa": "P",
+        "id": 4,
+        "nombre": "Eric"
+    },
+    {
+        "empresa": "P",
+        "id": 5,
+        "nombre": "Victor"
+    },
+    {
+        "empresa": "T",
+        "id": 4,
+        "nombre": "Marco"
+    },
+    {
+        "empresa": "T",
+        "id": 5,
+        "nombre": "Diego"
+    },
+    {
+        "empresa": "T",
+        "id": 6,
+        "nombre": "Daniel"
+    },
+    {
+        "empresa": "T",
+        "id": 7,
+        "nombre": "Fabi"
+    },
+    {
+        "empresa": "T",
+        "id": 8,
+        "nombre": "Luis"
+    }
+    ]
+}
