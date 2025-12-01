@@ -91,12 +91,17 @@ async function participar() {
                     const loader = document.getElementById('loaderOverlay');
                     loader.classList.add('active');
 
+                    const audio = document.getElementById("audioLoader");
+                    if(audio) {
+                        audio.currentTime = 0;
+                        audio.play().catch(e => console.log("Audio bloqueado por navegador"));
+                    }
+
                     // Esperar animación y luego ejecutar lógica
                     setTimeout(() => {
                         loader.classList.remove('active');
                         mostrarGanador(empleado.nombre, premio.nombre);
-                        setInterval(cargarTabla, 5000);
-                    }, 8000);
+                    }, 7000);
 
                     const fd = new FormData();
                     fd.append("empresa", empresa);
@@ -127,11 +132,17 @@ async function participar() {
                     const loader = document.getElementById('loaderOverlay');
                     loader.classList.add('active');
 
+                    const audio = document.getElementById("audioLoader");
+                    if(audio) {
+                        audio.currentTime = 0;
+                        audio.play().catch(e => console.log("Audio bloqueado por navegador"));
+                    }
+
                     // Esperar animación y luego ejecutar lógica
                     setTimeout(() => {
                         loader.classList.remove('active');
                         mostrarNoGanador(empleado.nombre, premio.nombre);
-                    }, 5000);
+                    }, 7000);
 
                     const fd = new FormData();
                     fd.append("empresa", empresa);
@@ -251,7 +262,7 @@ function mostrarMensaje(mensajePersonalizado) {
 // Función para mostrar modal de NO ganador
 function mostrarNoGanador(nombre, premio) {
     const modal = document.getElementById("modalNoGanador");
-    //const audio = document.getElementById("audioCelebracion");
+    const audio = document.getElementById("audioLose");
     const textoContainer = document.getElementById("modalTexto3");
 
     textoContainer.innerHTML = `
@@ -263,11 +274,10 @@ function mostrarNoGanador(nombre, premio) {
     modal.classList.add("active");
 
     // Reproducir sonido
-    /*
     if(audio) {
         audio.currentTime = 0;
         audio.play().catch(e => console.log("Audio bloqueado por navegador"));
-    }*/
+    }
 
     // Cerrar automáticamente después de un tiempo
     setTimeout(() => {
@@ -283,6 +293,7 @@ document.addEventListener('DOMContentLoaded', cargarTabla);
 
 // Función para cargar la tabla de resultados
 function cargarTabla() {
+/*
     const tbody = document.getElementById('tablaBodyW');
     const resultadosW = JSON.parse(localStorage.getItem("resultadosW")) || [];
 
@@ -309,7 +320,43 @@ function cargarTabla() {
     `;
     tbody.appendChild(tr);
     });
+*/
+    const tbody = document.getElementById('tablaBodyW');
+
+    fetch("cargarTablaW.php")
+        .then(res => res.json())
+        .then(resultadosW => {
+
+            tbody.innerHTML = ""; 
+
+            if (resultadosW.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" align="center" class="empty-msg"> 
+                            Aún no hay ganadores registrados. <br> 
+                            ¡Ve al sorteo para empezar!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            resultadosW.forEach((r) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: bold;">${r.empresa}</td>
+                    <td style="font-weight: bold;">${r.nombre}</td>
+                    <td class="premio-col">${r.descripcion}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        })
+    .catch(err => console.error("Error cargando BD:", err));
+
 }
 
 
 inicializarDatos();
+
+setInterval(cargarTabla, 1000);

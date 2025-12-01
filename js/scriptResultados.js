@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', cargarTablaL);
 
 // Función para cargar la tabla de resultados
 function cargarTablaW() {
+//----------------------------- Código anterior usando localStorage -------------------------------------
+/*   
     const tbody = document.getElementById('tablaBodyW');
     const resultadosW = JSON.parse(localStorage.getItem("resultadosW")) || [];
 
@@ -34,43 +36,92 @@ function cargarTablaW() {
     `;
     tbody.appendChild(tr);
     });
+*/
+    const tbody = document.getElementById('tablaBodyW');
+
+    fetch("cargarTablaW.php")
+        .then(res => res.json())
+        .then(resultadosW => {
+
+            tbody.innerHTML = ""; 
+
+            if (resultadosW.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" align="center" class="empty-msg"> 
+                            Aún no hay ganadores registrados. <br> 
+                            ¡Ve al sorteo para empezar!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            resultadosW.forEach((r) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${r.empresa}</td>
+                    <td>${r.id}</td>
+                    <td>${r.nombre}</td>
+                    <td class="premio-col">${r.descripcion}</td>
+                    <td class="premio-col">${r.premio}</td>
+                    <td><button onclick="eliminarRegistroW(${r.id})">BORRAR</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        })
+        .catch(err => console.error("Error cargando BD:", err));
 }
 
 // Función para cargar la tabla de resultados
 function cargarTablaL() {
     const tbody = document.getElementById('tablaBodyL');
-    const resultadosL = JSON.parse(localStorage.getItem("resultadosL")) || [];
 
-    tbody.innerHTML = ""; 
+    fetch("cargarTablaL.php")
+        .then(res => res.json())
+        .then(resultadosL => {
 
-    if (resultadosL.length === 0) {
-    tbody.innerHTML = `
-        <tr>
-        <td colspan="4" align="center" class="empty-msg"> 
-            Aún no hay ganadores registrados. <br> 
-            ¡Ve al sorteo para empezar!
-        </td>
-        </tr>
-    `;
-    return;
-    }
+            tbody.innerHTML = ""; 
 
-    resultadosL.forEach((s, index) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-        <td>${s.empresa}</td>
-        <td>${s.id}</td>
-        <td>${s.nombre}</td>
-        <td class="premio-col">${s.descripcion}</td>
-        <td><button onclick="eliminarRegistroL(${index})">BORRAR</button></td>
-    `;
-    tbody.appendChild(tr);
-    });
+            if (resultadosL.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" align="center" class="empty-msg"> 
+                            Aún no hay ganadores registrados. <br> 
+                            ¡Ve al sorteo para empezar!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            resultadosL.forEach((r) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${r.empresa}</td>
+                    <td>${r.id}</td>
+                    <td>${r.nombre}</td>
+                    <td class="premio-col">${r.descripcion}</td>
+                    <td><button onclick="eliminarRegistroL(${r.id})">BORRAR</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        })
+        .catch(err => console.error("Error cargando BD:", err));
 }
 
-function eliminarRegistroW(index) {
-    const premios = JSON.parse(localStorage.getItem("premios")) || [];
-    const resultadosW = JSON.parse(localStorage.getItem("resultadosW")) || [];
+function eliminarRegistroW(id) {
+    let premios = JSON.parse(localStorage.getItem("premios")) || [];
+    let resultadosW = JSON.parse(localStorage.getItem("resultadosW")) || [];
+
+    const index = resultadosW.findIndex(r => r.id == id);
+
+    if (index === -1) {
+        console.error("No se encontró el registro en localStorage");
+        return;
+    }
 
     const eliminado = resultadosW.splice(index, 1)[0];
 
@@ -85,11 +136,32 @@ function eliminarRegistroW(index) {
     localStorage.setItem("premios", JSON.stringify(premios));
 
     cargarTablaW();
+
+    // --- Eliminar también de la BD ---
+    const fd = new FormData();
+    fd.append("id", id);
+
+    fetch("eliminarResultadosW.php", {
+        method: "POST",
+        body: fd
+    })
+    .then(res => res.text())  
+    .then(r => {
+        if (r === "OK") cargarTablaW();
+    });
 }
 
-function eliminarRegistroL(index) {
-    const premios = JSON.parse(localStorage.getItem("premios")) || [];
-    const resultadosL = JSON.parse(localStorage.getItem("resultadosL")) || [];
+
+function eliminarRegistroL(id) {
+    let premios = JSON.parse(localStorage.getItem("premios")) || [];
+    let resultadosL = JSON.parse(localStorage.getItem("resultadosL")) || [];
+
+    const index = resultadosL.findIndex(r => r.id == id);
+
+    if (index === -1) {
+        console.error("No se encontró el registro en localStorage");
+        return;
+    }
 
     const eliminado = resultadosL.splice(index, 1)[0];
 
@@ -104,6 +176,19 @@ function eliminarRegistroL(index) {
     localStorage.setItem("premios", JSON.stringify(premios));
 
     cargarTablaL();
+
+    // --- Eliminar también de la BD ---
+    const fd = new FormData();
+    fd.append("id", id);
+
+    fetch("eliminarResultadosL.php", {
+        method: "POST",
+        body: fd
+    })
+    .then(res => res.text())  
+    .then(r => {
+        if (r === "OK") cargarTablaL();
+    });
 }
 
 
@@ -232,4 +317,4 @@ function descargarJSON(obj, nombreArchivo) {
 }
 
 setInterval(cargarTablaW, 1000);
-setInterval(cargarTablaW, 1000);
+setInterval(cargarTablaL, 1000);
