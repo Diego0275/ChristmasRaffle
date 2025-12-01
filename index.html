@@ -10,9 +10,7 @@
 
 <body>
   <div id="mainCard" class="glass-panel card-sorteo fade-in">
-    <h1><a href="./resultados.html">🎅</a>Premios Posada</h1>
-    <p class="subtitle">¡Participa para ganar increíbles premios navideños! 🎁</p>
-
+    <h1><a href="./resultados.html">🎄</a>Rifa Posada 🎄</h1>
     <div class="form-content">
       <div class="form-group">
         <label for="empresa">Empresa (P / T):</label>
@@ -30,14 +28,21 @@
         <label for="idEmpleado">ID del empleado:</label>
         <input 
           id="idEmpleado"
+          oninput="mostrarNombre()"
           type="number"
-          placeholder="Ej. 123"
+          placeholder="Ej. 001"
           autocomplete="off">
         <span id="msgId" class="error-msg"></span>
       </div>
 
-      <!-- Div oculto para mensajes de error genéricos si es necesario -->
-      <div id="resultado" class="error-msg" style="margin-bottom: 10px;"></div>
+      <div class="form-group">
+        <label for="nombreEmpleado">Nombre del empleado:</label>
+        <input 
+          id="nombreEmpleado" 
+          type="text" 
+          readonly>
+        <span id="msgEmpresa" class="error-msg"></span>
+      </div>
 
       <div class="btn-container">
         <button 
@@ -47,6 +52,25 @@
           🎄 ¡Participar Ahora!
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- Se usa glass-panel y container-resultados --> 
+  <div class="glass-panel container-resultados">
+    <h1>📋 Lista de Ganadores</h1>
+    <div class="table-wrapper">
+      <table id="tablaResultadosW">
+        <thead>
+          <tr>
+            <th>Empresa</th>
+            <th>Nombre</th>
+            <th>Premio Ganado</th>
+          </tr>
+        </thead>
+        <tbody id="tablaBodyW">
+          <!-- Aquí se insertarán los datos con JS -->
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -77,11 +101,20 @@
   </div>
 
   <!-- Modal Repetido / Error -->
-  <div id="modalRepetido" class="modal-overlay">
+  <div id="modalMensaje" class="modal-overlay">
     <div class="modal-content" style="border-color: var(--xmas-red);" onclick="event.stopPropagation()">
       <span class="modal-icon">⚠️</span>
       <h2 class="modal-title" style="font-size: 1.5rem;">Atención</h2>
       <p id="modalTexto2" style="font-size: 1.1rem; color: #555;"></p>
+    </div>
+  </div>
+
+  <!-- Modal del No Ganador -->
+  <div id="modalNoGanador" class="modal-overlay">
+    <div class="modal-content" style="border-color: var(--xmas-red);" onclick="event.stopPropagation()">
+      <span class="modal-icon">🤡</span>
+      <h2 class="modal-title" style="font-size: 1.5rem;">Lo siento :[</h2>
+      <p id="modalTexto3" style="font-size: 1.1rem; color: #555;"></p>
     </div>
   </div>
 

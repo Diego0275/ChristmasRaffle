@@ -9,26 +9,48 @@
   <title>Resultados del Sorteo 🎄</title>
 </head>
 
-<!-- Agregamos la clase layout-column para que el diseño sea vertical -->
 <body class="layout-column">
-
-  <!-- Se usa glass-panel y container-resultados -->
   <div class="glass-panel container-resultados">
-    <h1>📋 Lista de Ganadores</h1>
-    <p style="color: var(--xmas-green); font-weight: 600;">
-      Registro oficial de premios entregados
-    </p>
+    <h1>📋 Lista de Resultados</h1>
 
+    <!--Tabla Ganadores-->
+    <p style="color: var(--xmas-green); font-weight: 600;">
+      Registro de Ganadores
+    </p>
     <div class="table-wrapper">
       <table id="tablaResultados">
         <thead>
           <tr>
             <th>Empresa</th>
+            <th>Id</th>
             <th>Nombre</th>
             <th>Premio Ganado</th>
+            <th>No. Premio</th>
+            <th></th>
           </tr>
         </thead>
-        <tbody id="tablaBody">
+        <tbody id="tablaBodyW">
+          <!-- Aquí se insertarán los datos con JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!--Tabla No Ganadores-->
+    <p style="color: var(--xmas-green); font-weight: 600;">
+      Registro de No Ganadores
+    </p>
+    <div class="table-wrapper">
+      <table id="tablaResultados">
+        <thead>
+          <tr>
+            <th>Empresa</th>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Premio Ganado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tablaBodyL">
           <!-- Aquí se insertarán los datos con JS -->
         </tbody>
       </table>
@@ -40,8 +62,12 @@
         ⬅️ Regresar al Sorteo
       </a>
 
-      <button onclick="exportarExcel()" class="btn-primary">
-        📄 Descargar Excel
+      <button onclick="exportarExcelW()" class="btn-primary">
+        📄 Exportar Ganadores
+      </button>
+
+      <button onclick="exportarExcelL()" class="btn-primary">
+        📄 Exportar No Ganadores
       </button>
       
       <!-- Botón oculto para limpiar datos -->

@@ -17,7 +17,6 @@ body {
   display: flex;
   align-items: center; 
   justify-content: center;
-  padding: 20px;
   overflow-x: hidden;
   position: relative;
   color: #333;
@@ -64,6 +63,7 @@ body::before {
   z-index: 1;
   text-align: center;
   width: 100%;
+  margin: 10px;
 }
 
 /* Específico para la tarjeta de sorteo */
@@ -245,10 +245,12 @@ input[type="file"]::-webkit-file-upload-button {
 /* --- TABLAS (Resultados) --- */
 .table-wrapper {
   overflow-x: auto;
+  overflow-y: scroll;
   margin-top: 20px;
   border-radius: 10px;
   border: 1px solid #ddd;
   background: white;
+  max-height: 400px;
 }
 
 table {
@@ -264,6 +266,8 @@ th, td {
 }
 
 th {
+  top: 0;
+  position: sticky;
   background-color: var(--xmas-green);
   color: white;
   font-weight: bold;
@@ -358,7 +362,7 @@ tr:hover {
 .loader-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(26, 71, 42, 0.85); /* Verde oscuro translúcido */
+  background: rgba(26, 71, 42);
   z-index: 200; /* Encima de todo */
   display: none;
   flex-direction: column;

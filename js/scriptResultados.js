@@ -1,18 +1,19 @@
 //-----------------------------Script para tabla de resultados-------------------------------------
 // Cargar tabla de resultados al iniciar
-document.addEventListener('DOMContentLoaded', cargarTabla);
+document.addEventListener('DOMContentLoaded', cargarTablaW);
+document.addEventListener('DOMContentLoaded', cargarTablaL);
 
 // Función para cargar la tabla de resultados
-function cargarTabla() {
-    const tbody = document.getElementById('tablaBody');
-    const resultados = JSON.parse(sessionStorage.getItem("resultados")) || [];
+function cargarTablaW() {
+    const tbody = document.getElementById('tablaBodyW');
+    const resultadosW = JSON.parse(localStorage.getItem("resultadosW")) || [];
 
     tbody.innerHTML = ""; 
 
-    if (resultados.length === 0) {
+    if (resultadosW.length === 0) {
     tbody.innerHTML = `
         <tr>
-        <td colspan="4" align="center" class="empty-msg">
+        <td colspan="4" align="center" class="empty-msg"> 
             Aún no hay ganadores registrados. <br> 
             ¡Ve al sorteo para empezar!
         </td>
@@ -21,42 +22,136 @@ function cargarTabla() {
     return;
     }
 
-    resultados.forEach(r => {
+    resultadosW.forEach((r, index) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-        <td style="font-weight:bold;">${r.empresa}</td>
+        <td>${r.empresa}</td>
+        <td>${r.id}</td>
         <td>${r.nombre}</td>
-        <td class="premio-col">🎁 ${r.descripcion || r.premio}</td>
+        <td class="premio-col">${r.descripcion}</td>
+        <td class="premio-col">${r.premio}</td>
+        <td><button onclick="eliminarRegistroW(${index})">BORRAR</button></td>
     `;
     tbody.appendChild(tr);
     });
 }
 
-// Función para limpiar datos de sessionStorage
+// Función para cargar la tabla de resultados
+function cargarTablaL() {
+    const tbody = document.getElementById('tablaBodyL');
+    const resultadosL = JSON.parse(localStorage.getItem("resultadosL")) || [];
+
+    tbody.innerHTML = ""; 
+
+    if (resultadosL.length === 0) {
+    tbody.innerHTML = `
+        <tr>
+        <td colspan="4" align="center" class="empty-msg"> 
+            Aún no hay ganadores registrados. <br> 
+            ¡Ve al sorteo para empezar!
+        </td>
+        </tr>
+    `;
+    return;
+    }
+
+    resultadosL.forEach((s, index) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td>${s.empresa}</td>
+        <td>${s.id}</td>
+        <td>${s.nombre}</td>
+        <td class="premio-col">${s.descripcion}</td>
+        <td><button onclick="eliminarRegistroL(${index})">BORRAR</button></td>
+    `;
+    tbody.appendChild(tr);
+    });
+}
+
+function eliminarRegistroW(index) {
+    const premios = JSON.parse(localStorage.getItem("premios")) || [];
+    const resultadosW = JSON.parse(localStorage.getItem("resultadosW")) || [];
+
+    const eliminado = resultadosW.splice(index, 1)[0];
+
+    const recuperado = {
+        id: eliminado.premio,
+        nombre: eliminado.descripcion
+    };
+
+    premios.unshift(recuperado);
+
+    localStorage.setItem("resultadosW", JSON.stringify(resultadosW));
+    localStorage.setItem("premios", JSON.stringify(premios));
+
+    cargarTablaW();
+}
+
+function eliminarRegistroL(index) {
+    const premios = JSON.parse(localStorage.getItem("premios")) || [];
+    const resultadosL = JSON.parse(localStorage.getItem("resultadosL")) || [];
+
+    const eliminado = resultadosL.splice(index, 1)[0];
+
+    const recuperado = {
+        id: eliminado.premio,
+        nombre: eliminado.descripcion
+    };
+
+    premios.unshift(recuperado);
+
+    localStorage.setItem("resultadosL", JSON.stringify(resultadosL));
+    localStorage.setItem("premios", JSON.stringify(premios));
+
+    cargarTablaL();
+}
+
+
+// Función para limpiar datos de localStorage
 function limpiarDatos() {
     if(confirm("¿Estás seguro de borrar todos los resultados guardados?")) {
-        sessionStorage.removeItem("resultados");
+        localStorage.removeItem("resultadosW");
+        localStorage.removeItem("resultadosL");
         location.reload();
     }
 }
 
 // Función para exportar resultados a Excel
-function exportarExcel() {
-    const resultados = JSON.parse(sessionStorage.getItem("resultados")) || [];
-    if (resultados.length === 0) {
+function exportarExcelW() {
+    const resultadosW = JSON.parse(localStorage.getItem("resultadosW")) || [];
+    if (resultadosW.length === 0) {
         alert("No hay resultados para exportar.");
         return;
     }
 
     // Convertir a hoja de Excel
-    const hoja = XLSX.utils.json_to_sheet(resultados);
+    const hoja = XLSX.utils.json_to_sheet(resultadosW);
 
     // Crear libro
     const libro = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(libro, hoja, "Resultados");
+    XLSX.utils.book_append_sheet(libro, hoja, "ResultadosW");
 
     // Descargar archivo
-    XLSX.writeFile(libro, "resultados_sorteo.xlsx");
+    XLSX.writeFile(libro, "resultadosGanadores.xlsx");
+}
+
+// Función para exportar resultados a Excel
+function exportarExcelL() {
+    const resultadosL = JSON.parse(localStorage.getItem("resultadosL")) || [];
+    if (resultadosL.length === 0) {
+        alert("No hay resultados para exportar.");
+        return;
+    }
+
+    // Convertir a hoja de Excel
+    const hoja = XLSX.utils.json_to_sheet(resultadosL);
+
+    // Crear libro
+    const libro = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(libro, hoja, "ResultadosL");
+
+    // Descargar archivo
+    XLSX.writeFile(libro, "resultadosNoGanadores.xlsx");
 }
 
 //-----------------------------Script para importar Excel-------------------------------------
@@ -135,3 +230,6 @@ function descargarJSON(obj, nombreArchivo) {
     enlace.download = nombreArchivo;
     enlace.click();
 }
+
+setInterval(cargarTablaW, 1000);
+setInterval(cargarTablaW, 1000);

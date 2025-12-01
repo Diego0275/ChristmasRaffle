@@ -1,54 +1,74 @@
 {
     "empleados": [
-    {
-        "empresa": "P",
-        "id": 1,
-        "nombre": "Juan"
-    },
-    {
-        "empresa": "P",
-        "id": 2,
-        "nombre": "Ana"
-    },
-    {
-        "empresa": "P",
-        "id": 3,
-        "nombre": "Enzo"
-    },
-    {
-        "empresa": "P",
-        "id": 4,
-        "nombre": "Eric"
-    },
-    {
-        "empresa": "P",
-        "id": 5,
-        "nombre": "Victor"
-    },
-    {
-        "empresa": "T",
-        "id": 4,
-        "nombre": "Marco"
-    },
-    {
-        "empresa": "T",
-        "id": 5,
-        "nombre": "Diego"
-    },
-    {
-        "empresa": "T",
-        "id": 6,
-        "nombre": "Daniel"
-    },
-    {
-        "empresa": "T",
-        "id": 7,
-        "nombre": "Fabi"
-    },
-    {
-        "empresa": "T",
-        "id": 8,
-        "nombre": "Luis"
-    }
+        {
+            "empresa": "PROMÉDICA",
+            "id": 1,
+            "nombre": "David Amezcua"
+        },
+        {
+            "empresa": "PROMÉDICA",
+            "id": 2,
+            "nombre": "Diego Vizcaya"
+        },
+        {
+            "empresa": "PROMÉDICA",
+            "id": 3,
+            "nombre": "Luis Lopez"
+        },
+        {
+            "empresa": "PROMÉDICA",
+            "id": 4,
+            "nombre": "Juan Valdes"
+        },
+        {
+            "empresa": "PROMÉDICA",
+            "id": 5,
+            "nombre": "Marco Joya"
+        },
+        {
+            "empresa": "PROMÉDICA",
+            "id": 6,
+            "nombre": "Victor Medina"
+        },
+        {
+            "empresa": "PROMÉDICA",
+            "id": 7,
+            "nombre": "Fabi Fernandez"
+        },
+        {
+            "empresa": "TEQUILERA",
+            "id": 1,
+            "nombre": "Pedro Garcia"
+        },
+        {
+            "empresa": "TEQUILERA",
+            "id": 2,
+            "nombre": "Fernando Perez"
+        },
+        {
+            "empresa": "TEQUILERA",
+            "id": 3,
+            "nombre": "Carlos Zapata"
+        },
+        {
+            "empresa": "TEQUILERA",
+            "id": 4,
+            "nombre": "Jose Becerra"
+        },
+        {
+            "empresa": "TEQUILERA",
+            "id": 5,
+            "nombre": "Gustavo Mendez"
+        },
+        {
+            "empresa": "TEQUILERA",
+            "id": 6,
+            "nombre": "Ana Juarez"
+        },
+        {
+            "empresa": "TEQUILERA",
+            "id": 7,
+            "nombre": "Paco Bermudez"
+        }
     ]
 }
