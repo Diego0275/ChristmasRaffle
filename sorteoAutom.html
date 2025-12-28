@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="js/scriptSorteoAutom.js"></script>
+    <link rel="stylesheet" href="styles.css"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premios Posada 🎄</title>
+</head>
+<body>
+    <div id="mainCard" class="glass-panel card-sorteo fade-in">
+    <h1><a href="index.html">🎄</a>Rifa Posada<a href="resultados.html">🎄</a></h1>
+    <div class="form-content">
+      <div class="btn-container">
+        <button 
+          id="btn-Participar"
+          onclick="iniciarSorteo()" 
+          class="btn-primary" 
+          style="width: 100%; padding: 16px; font-size: 1.3rem; letter-spacing: 2px;">
+          🎄 ¡Iniciar Sorteo!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Se usa glass-panel y container-resultados --> 
+  <div class="glass-panel container-resultados">
+    <h1>📋 Lista de Ganadores</h1>
+    <div class="table-wrapper">
+      <table id="tablaResultadosW">
+        <thead>
+          <tr>
+            <th>Empresa</th>
+            <th>Nombre</th>
+            <th>Premio Ganado</th>
+          </tr>
+        </thead>
+        <tbody id="tablaBodyW">
+          <!-- Aquí se insertarán los datos con JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PANTALLA DE CARGA (SLOT MACHINE / TRAGAMONEDAS) -->
+  <div id="loaderOverlay" class="loader-overlay">
+    
+    <!-- Estructura del Tragamonedas -->
+    <div class="loader-slot">
+      <div class="slot-reel">
+        <div class="slot-icon">🎅</div>
+        <div class="slot-icon">🎁</div>
+        <div class="slot-icon">🎄</div>
+        <!-- Duplicado del primero para el loop perfecto -->
+        <div class="slot-icon">🎅</div>
+      </div>
+    </div>
+
+    <div class="loader-text">Sorteando Premio</div>
+  </div>
+
+  <!-- Modal del ganador -->
+  <div id="modalGanador" class="modal-overlay">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <span class="modal-icon">🎉</span>
+      <h2 class="modal-title">¡Felicidades!</h2>
+      <p id="modalTexto1" style="font-size: 1.2rem; color: #333;"></p>
+    </div>
+  </div>
+
+  <!-- Modal Repetido / Error -->
+  <div id="modalMensaje" class="modal-overlay">
+    <div class="modal-content" style="border-color: var(--xmas-red);" onclick="event.stopPropagation()">
+      <span class="modal-icon">⚠️</span>
+      <h2 class="modal-title" style="font-size: 1.5rem;">Atención</h2>
+      <p id="modalTexto2" style="font-size: 1.1rem; color: #555;"></p>
+    </div>
+  </div>
+
+  <!-- Modal del No Ganador -->
+  <div id="modalNoGanador" class="modal-overlay">
+    <div class="modal-content" style="border-color: var(--xmas-red);" onclick="event.stopPropagation()">
+      <span class="modal-icon">🤡</span>
+      <h2 class="modal-title" style="font-size: 1.5rem;">Lo siento :[</h2>
+      <p id="modalTexto3" style="font-size: 1.1rem; color: #555;"></p>
+    </div>
+  </div>
+
+  <audio id="audioCelebracion" src="audio/celebration.mp3"></audio>
+  <audio id="audioLoader" src="audio/loader.mp3"></audio>
+  <audio id="audioLose" src="audio/lose.mp3"></audio>
+</body>
+</html>

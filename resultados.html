@@ -24,7 +24,7 @@
             <th>Empresa</th>
             <th>Id</th>
             <th>Nombre</th>
-            <th>Premio Ganado</th>
+            <th>Premio</th>
             <th>No. Premio</th>
             <th></th>
           </tr>
@@ -46,37 +46,45 @@
             <th>Empresa</th>
             <th>Id</th>
             <th>Nombre</th>
-            <th>Premio Ganado</th>
             <th></th>
+            <th></th> 
           </tr>
         </thead>
         <tbody id="tablaBodyL">
-          <!-- Aquí se insertarán los datos con JS -->
         </tbody>
       </table>
     </div>
 
     <div class="btn-container">
       <!-- Regresar al sorteo -->
-      <a href="index.html" class="btn-link btn-secondary">
+      <button onclick="window.history.back()" class="btn-link btn-secondary">
         ⬅️ Regresar al Sorteo
-      </a>
-
-      <button onclick="exportarExcelW()" class="btn-primary">
-        📄 Exportar Ganadores
       </button>
 
-      <button onclick="exportarExcelL()" class="btn-primary">
-        📄 Exportar No Ganadores
-      </button>
+      <form action="exportarResultadosW.php" method="get">
+        <button type="submit" class="btn-primary">
+          📄 Exportar Ganadores
+        </button>
+      </form>
+      
+      <form action="exportarResultadosL.php" method="get">
+        <button type="submit" class="btn-primary">
+          📄 Exportar NO Ganadores
+        </button>
+      </form>
       
       <!-- Botón oculto para limpiar datos -->
-      <button onclick="limpiarDatos()" style="background: #666; color: white; font-size: 0.8rem;">
+      <button onclick="limpiarDatos()" class="btn-delete">
         🗑️ Resetear
       </button>
     </div>
     <div class="form-group">
       <p></p>
+      <p style="font-weight: bold;">NOTA: El excel que cargues tiene que llevar la siguiente estructura,
+        en caso de el sorteo manual se tienen que agregar los "Gracias por participar" a la lista de premios.
+      </p>
+      <p style="font-weight: bold;">Empleados: Empresa, ID, Nombre</p>
+      <p style="font-weight: bold;">Premios: ID, Nombre</p>
       <label for="inputExcel">Cargar Excel:</label>
       <input type="file" id="inputExcel" accept=".xlsx, .xls">
     </div>

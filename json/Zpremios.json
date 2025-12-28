@@ -1,0 +1,44 @@
+{
+    "premios": [
+        {
+            "id": 0,
+            "nombre": "GRACIAS POR PARTICIPAR"
+        },
+        {
+            "id": 0,
+            "nombre": "GRACIAS POR PARTICIPAR"
+        },
+        {
+            "id": 0,
+            "nombre": "GRACIAS POR PARTICIPAR"
+        },
+        {
+            "id": 0,
+            "nombre": "GRACIAS POR PARTICIPAR"
+        },
+        {
+            "id": 39,
+            "nombre": "Hervidor Taurus 1.8 Litros Silver"
+        },
+        {
+            "id": 40,
+            "nombre": "Hidrolavadora Koblenz HL-145 V 1400 Psi"
+        },
+        {
+            "id": 41,
+            "nombre": "Hidrolavadora Koblenz HL-145 V 1400 Psi"
+        },
+        {
+            "id": 42,
+            "nombre": "Horno De Microondas General Electric MGE07SEJ 0.7 Pies Espejo"
+        },
+        {
+            "id": 43,
+            "nombre": "Horno De Microondas General Electric MGE07SEJ 0.7 Pies Espejo"
+        },
+        {
+            "id": 44,
+            "nombre": "Horno De Microondas Whirlpool WM1211D 1.1 Pies Silver"
+        }
+    ]
+}

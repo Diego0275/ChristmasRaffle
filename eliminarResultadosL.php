@@ -1,10 +1,10 @@
 <?php
 include "conexionBD.php";
 
-$id = $_POST['id'];
+$nombre = $_POST['nombre'];
 
-$stmt = $conn->prepare("DELETE FROM resultadosl WHERE id=?");
-$stmt->bind_param("i", $id);
+$stmt = $conn->prepare("DELETE FROM resultadosl WHERE nombre=?");
+$stmt->bind_param("s", $nombre);
 $stmt->execute();
 
 echo "OK";

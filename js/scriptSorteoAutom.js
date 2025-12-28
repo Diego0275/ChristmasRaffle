@@ -49,15 +49,68 @@ function mezclarPremios(array) {
     return array;
 }
 
-async function participar() {
-    const id = parseInt(document.getElementById("idEmpleado").value);
-    const empresa = document.getElementById("empresa").value.trim().toUpperCase();
+async function iniciarSorteo() {
+    await inicializarDatos(); 
+    
+    const empleados = JSON.parse(localStorage.getItem("empleados")) || [];
+    const resultadosW = JSON.parse(localStorage.getItem("resultadosW")) || [];
+    const resultadosL = JSON.parse(localStorage.getItem("resultadosW")) || [];
+    const premios = JSON.parse(localStorage.getItem("premios")) || [];
 
-    if (!empresa || !id) {
-        mostrarMensaje("Por favor completa todos los campos");
+    if (premios.length === 0) {
+        mostrarMensaje("No hay premios para iniciar el sorteo automático.");
         return;
     }
 
+    // Filtrar candidatos que NO han ganado
+    const candidatos = empleados.filter(e => 
+        !resultadosW.some(r => r.id === e.id && r.empresa === e.empresa)
+    );
+
+    let noGanadores = empleados.slice(premios.length);
+    resultadosL.push(...noGanadores);
+    localStorage.setItem("resultadosL", JSON.stringify(resultadosL));
+    for (const per of resultadosL ) {
+        const fd = new FormData();
+        fd.append("empresa", per.empresa);
+        fd.append("id", per.id);
+        fd.append("nombre", per.nombre);
+        fd.append("descripcion", per.descripcion);
+        fd.append("premio", per.premio);         
+
+        fetch("guardarResultadosL.php", {
+            method: "POST",
+            body: fd
+        })
+        .then(res => res.text())
+        .then(r => {
+            console.log("Respuesta del servidor:", r);
+        })
+        .catch(err => console.log("Error en fetch:", err));
+    }
+
+    let premioIndex = 0;
+    // --- BUCLE PRINCIPAL ---
+    for (const emp of candidatos) {
+        if (premioIndex == premios.length) {
+            mostrarMensaje("¡Sorteo finalizado!");
+            break;
+        }
+
+        const exito = await participar(emp.id, emp.empresa, premioIndex);
+
+        if (exito) {
+            await new Promise(r => setTimeout(r, 13000));
+        } else {
+            await new Promise(r => setTimeout(r, 13000));
+        }
+        premioIndex++;
+
+        cargarTabla();
+    }
+}
+
+async function participar(id, empresa, premioIndex) {
     try {
         await inicializarDatos();
         
@@ -66,16 +119,13 @@ async function participar() {
         let resultadosW = JSON.parse(localStorage.getItem("resultadosW"));
         let resultadosL = JSON.parse(localStorage.getItem("resultadosL"));
 
-        let premiosConID = premios.filter((premio) => premio.id != 0);
-
         const respLimite = await fetch("verificarLimite.php");
         const totalLimite = await respLimite.text();
-        if (parseInt(totalLimite) == premiosConID.length) {
+        if (parseInt(totalLimite) == premios.length) {
             mostrarMensaje("¡Se alcanzó el límite de ganadores! <br> Sorteo finalizado.");
             return; 
         } else {
             console.log("Aun hay premios disponibles");
-
             // Buscar el empleado
             const empleado = empleados.find(e => e.id === id && e.empresa === empresa);
 
@@ -100,17 +150,15 @@ async function participar() {
                         return;
                     } else if (statusTexto.trim() === 'NO PARTICIPO') {
                         console.log("Empleado no ha participado, puede continuar.");
-
-                        // Verificar si hay premios disponibles
+                        
                         if (!premios || premios.length === 0) {
                             mostrarMensaje("¡Ya se acabaron los premios! 😱");
                             return;
-                        } 
+                        }
 
-                        const premioIndex = Math.floor(Math.random() * premios.length);
                         const premio = premios[premioIndex];
+                        console.log(`Premio seleccionado: ${premio.nombre} (ID: ${premio.id})`);
 
-                        // Validar si el premio ya fue tomado
                         const fdPremio = new FormData();
                         fdPremio.append('premio', premio.id);
 
@@ -129,93 +177,42 @@ async function participar() {
                             premio: premio.id,
                             descripcion: premio.nombre
                         };
+                        // Guardar resultado
+                        resultadosW.unshift(nuevoResultadoW);
+                        localStorage.setItem("resultadosW", JSON.stringify(resultadosW));
 
-                        const nuevoResultadoL = {
-                            empresa,
-                            id: empleado.id,
-                            nombre: empleado.nombre,
-                            premio: premio.id,
-                            descripcion: premio.nombre
-                        };
+                        const loader = document.getElementById('loaderOverlay');
+                        loader.classList.add('active');
 
-                        if(premio.id != 0){
-                            // Guardar resultado
-                            resultadosW.unshift(nuevoResultadoW);
-                            localStorage.setItem("resultadosW", JSON.stringify(resultadosW));
-
-                            const loader = document.getElementById('loaderOverlay');
-                            loader.classList.add('active');
-
-                            const audio = document.getElementById("audioLoader");
-                            if(audio) {
-                                audio.currentTime = 0;
-                                audio.play().catch(e => console.log("Audio bloqueado por navegador"));
-                            }
-
-                            // Esperar animación y luego ejecutar lógica
-                            setTimeout(() => {
-                                loader.classList.remove('active');
-                                mostrarGanador(empleado.nombre, premio.id);
-                                cargarTabla();
-                            }, 7000);
-
-                            const fd = new FormData();
-                            fd.append("empresa", empresa);
-                            fd.append("id", empleado.id);
-                            fd.append("nombre", empleado.nombre);
-                            fd.append("descripcion", premio.nombre);
-                            fd.append("premio", premio.id);         
-
-                            fetch("guardarResultadosW.php", {
-                                method: "POST",
-                                body: fd
-                            })
-                            .then(res => res.text())
-                            .then(r => {
-                                console.log("Respuesta del servidor:", r);
-                            })
-                            .catch(err => console.log("Error en fetch:", err));
-                        } else {
-                            // Guardar resultado
-                            resultadosL.unshift(nuevoResultadoL);
-                            localStorage.setItem("resultadosL", JSON.stringify(resultadosL));
-
-                            const loader = document.getElementById('loaderOverlay');
-                            loader.classList.add('active');
-
-                            const audio = document.getElementById("audioLoader");
-                            if(audio) {
-                                audio.currentTime = 0;
-                                audio.play().catch(e => console.log("Audio bloqueado por navegador"));
-                            }
-
-                            // Esperar animación y luego ejecutar lógica
-                            setTimeout(() => {
-                                loader.classList.remove('active');
-                                mostrarNoGanador(empleado.nombre, premio.nombre);
-                            }, 7000);
-
-                            const fd = new FormData();
-                            fd.append("empresa", empresa);
-                            fd.append("id", empleado.id);
-                            fd.append("nombre", empleado.nombre);
-                            fd.append("descripcion", premio.nombre);
-                            fd.append("premio", premio.id);         
-
-                            fetch("guardarResultadosL.php", {
-                                method: "POST",
-                                body: fd
-                            })
-                            .then(res => res.text())
-                            .then(r => {
-                                console.log("Respuesta del servidor:", r);
-                            })
-                            .catch(err => console.log("Error en fetch:", err));
+                        const audio = document.getElementById("audioLoader");
+                        if(audio) {
+                            audio.currentTime = 0;
+                            audio.play().catch(e => console.log("Audio bloqueado por navegador"));
                         }
-                    document.getElementById("empresa").value = "";
-                    document.getElementById("idEmpleado").value = "";
-                    document.getElementById("nombreEmpleado").value = "";
-                    } 
+
+                        // Esperar animación y luego ejecutar lógica
+                        setTimeout(() => {
+                            loader.classList.remove('active');
+                            mostrarGanador(empleado.nombre, premio.id);
+                        }, 7000);
+
+                        const fd = new FormData();
+                        fd.append("empresa", empresa);
+                        fd.append("id", empleado.id);
+                        fd.append("nombre", empleado.nombre);
+                        fd.append("descripcion", premio.nombre);
+                        fd.append("premio", premio.id);         
+
+                        fetch("guardarResultadosW.php", {
+                            method: "POST",
+                            body: fd
+                        })
+                        .then(res => res.text())
+                        .then(r => {
+                            console.log("Respuesta del servidor:", r);
+                        })
+                        .catch(err => console.log("Error en fetch:", err));
+                    }
                 }   
             } else {
                 mostrarMensaje("No se encontró ningún empleado con esos datos.");
@@ -328,6 +325,8 @@ function mostrarNoGanador(nombre, premio) {
     // Mostrar modal
     modal.classList.add("active");
 
+    leerModal();
+
     // Reproducir sonido
     if(audio) {
         audio.currentTime = 0;
@@ -340,6 +339,17 @@ function mostrarNoGanador(nombre, premio) {
             modal.classList.remove("active"); // Oculta modal nuevamente
         }, 500);
     }, 5000);
+}
+
+function leerModal() {
+    const texto = document.getElementById("modalContenido").innerText;
+
+    const speech = new SpeechSynthesisUtterance(texto);
+    speech.lang = "es-MX"; // Ajusta el idioma
+    speech.rate = 1.0;     // Velocidad
+    speech.pitch = 1.0;    // Tono
+
+    speechSynthesis.speak(speech);
 }
 
 //-----------------------------Script para tabla de resultados-------------------------------------
